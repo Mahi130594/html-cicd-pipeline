@@ -1,43 +1,31 @@
+# check_commit.py
 import requests
+import json
 import os
 
-# GitHub repo info
-repo = "Mahi130594/html-cicd-pipeline"
-branch = "main"
-url = f"https://api.github.com/repos/{repo}/commits/{branch}"
+REPO = "yourusername/html-ci-project"
+BRANCH = "master"
+TOKEN = "your_github_token"  # create a personal access token with repo access
+LAST_COMMIT_FILE = "/home/ubuntu/last_commit.txt"
 
-# File to save the last known commit SHA
-sha_file = "last_commit.txt"
+headers = {"Authorization": f"token {TOKEN}"}
+url = f"https://api.github.com/repos/{REPO}/commits/{BRANCH}"
 
-def get_latest_commit_sha():
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data["sha"]
-    else:
-        print("Error fetching data from GitHub")
-        return None
+response = requests.get(url, headers=headers)
+commit_sha = response.json()["sha"]
 
-def read_saved_sha():
-    if os.path.exists(sha_file):
-        with open(sha_file, "r") as file:
-            return file.read().strip()
-    return ""
+# Load previous SHA
+if os.path.exists(LAST_COMMIT_FILE):
+    with open(LAST_COMMIT_FILE, "r") as f:
+        last_sha = f.read().strip()
+else:
+    last_sha = ""
 
-def save_new_sha(sha):
-    with open(sha_file, "w") as file:
-        file.write(sha)
-
-def main():
-    latest_sha = get_latest_commit_sha()
-    saved_sha = read_saved_sha()
-
-    if latest_sha and latest_sha != saved_sha:
-        print("New commit found! Running deployment...")
-        os.system("bash deploy.sh")
-        save_new_sha(latest_sha)
-    else:
-        print("No new commits.")
-
-if __name__ == "__main__":
-    main()
+# If there's a new commit
+if commit_sha != last_sha:
+    print("New commit found. Deploying...")
+    os.system("/home/ubuntu/deploy.sh")  # path to your deploy script
+    with open(LAST_COMMIT_FILE, "w") as f:
+        f.write(commit_sha)
+else:
+    print("No new commit.")
