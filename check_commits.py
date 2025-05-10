@@ -5,8 +5,8 @@ import os
 
 REPO = "yourusername/html-ci-project"
 BRANCH = "master"
-TOKEN = "your_github_token"  # create a personal access token with repo access
-LAST_COMMIT_FILE = "/home/ubuntu/last_commit.txt"
+TOKEN = "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"  # created a personal access token with repo access
+LAST_COMMIT_FILE = "/home/mahi/HTML-Project/last_commit.txt"
 
 headers = {"Authorization": f"token {TOKEN}"}
 url = f"https://api.github.com/repos/{REPO}/commits/{BRANCH}"
@@ -24,8 +24,8 @@ else:
 # If there's a new commit
 if commit_sha != last_sha:
     print("New commit found. Deploying...")
-    os.system("/home/ubuntu/deploy.sh")  # path to your deploy script
+    os.system("/home/mahi/HTML-Project/deploy.sh")  # path to your deploy script
     with open(LAST_COMMIT_FILE, "w") as f:
         f.write(commit_sha)
 else:
-    print("No new commit.")
+    print("No new commits found.")
