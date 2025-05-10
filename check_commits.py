@@ -6,7 +6,7 @@ token = os.environ.get('GITHUB_TOKEN')
 
 REPO = "yourusername/html-ci-project"
 BRANCH = "master"
-TOKEN = "ghp_****"  # created a personal access token with repo access
+TOKEN = "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"  # created a personal access token with repo access
 LAST_COMMIT_FILE = "/home/mahi/HTML-Project/last_commit.txt"
 
 headers = {"Authorization": f"token {TOKEN}"}
