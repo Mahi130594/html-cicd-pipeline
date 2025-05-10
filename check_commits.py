@@ -2,6 +2,7 @@
 import requests
 import json
 import os
+token = os.environ.get('GITHUB_TOKEN')
 
 REPO = "yourusername/html-ci-project"
 BRANCH = "master"
